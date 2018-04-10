@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Colors Investigation Tool</title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.2/css/bootstrap-colorpicker.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.css"/>
+
+    <link rel="stylesheet" href="styles.css"/>
+
+</head>
+<body>
+
+<div id="app">
+
+    <div class="sidebar">
+
+        <div class="controls">
+            <div id="color-picker" class="input-group colorpicker-component">
+            </div>
+            <div class="separator"></div>
+            <div id="canvas">
+            </div>
+        </div>
+
+        <hr>
+        <div class="controls">
+
+            <div class="hsv-sliders form-group">
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">H</span>
+                        <input type="number" class="form-control" id="h-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="h-range" min="0" max="360"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">S</span>
+                        <input type="number" class="form-control" id="s-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="s-range" min="0" max="100" />
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">V</span>
+                        <input type="number" class="form-control" id="v-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="v-range" min="0" max="100"/>
+                    </section>
+                </label>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="hsv-sliders form-group">
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">R</span>
+                        <input type="number" class="form-control" id="r-number" min="0" max="255">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="r-range" min="0" max="255"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">G</span>
+                        <input type="number" class="form-control" id="g-number" min="0" max="255">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="g-range" min="0" max="255"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">B</span>
+                        <input type="number" class="form-control" id="b-number" min="0" max="255">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="b-range" min="0" max="255"/>
+                    </section>
+                </label>
+            </div>
+
+        </div>
+
+        <hr>
+        <div class="controls">
+
+            <div class="hsv-sliders form-group">
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">△</span>
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaA-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' value="0" min="-50" max="50" id="deltaA-range"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">△</span>
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaB-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' value="0" min="-50" max="50" id="deltaB-range"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">△</span>
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaC-number">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' value="0" min="-50" max="50" id="deltaC-range"/>
+                    </section>
+                </label>
+
+                <!--<div class="form-group">-->
+                    <!--<label>Apply deltas to:</label>-->
+                    <!--<select class="form-control">-->
+                        <!--<option>HSV</option>-->
+                        <!--<option>RGB</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            </div>
+
+            <!--<div class="separator"></div>-->
+
+            <!--<div class="form-group">-->
+                <!--<button class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> △△</button>-->
+            <!--</div>-->
+        </div>
+        <hr>
+
+
+
+
+
+
+
+
+            <div class="form-group buttons">
+                <div class="input-number input-group">
+                    <span class="input-group-addon">#</span>
+                    <input type="number" class="form-control" min="3" value="3" id="colors-number">
+                </div>
+                <!--<button class="btn btn-default">Render</button>-->
+                <!--<div class="separator"></div>-->
+                <!--<button class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Export</button>-->
+            </div>
+    </div>
+
+</div>
+
+<!-- Vendor -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.2/js/bootstrap-colorpicker.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.2/d3.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js"></script>
+
+
+<!-- Custom -->
+<script src="script.js?123214fdsaz3"></script>
+<script>
+$(function () {
+    ColorPicker.init();
+});
+</script>
+
+</body>
+</html>
