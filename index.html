@@ -7,14 +7,31 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.2/css/bootstrap-colorpicker.css"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.css"/>
-
     <link rel="stylesheet" href="styles.css"/>
 
 </head>
 <body>
 
 <div id="app">
+    <div>
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="x-p">
+                😝
+            </div>
+        </div>
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="./">🎨 Colors Investigation Tool</a>
+
+            </div>
+            <div class="navbar-right">
+                <button class="navbar-btn btn btn-link" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent">
+                    <i class="glyphicon glyphicon-menu-hamburger"></i>
+                </button>
+            </div>
+        </nav>
+    </div>
+
 
     <div class="sidebar">
 
@@ -24,8 +41,9 @@
             <div class="separator"></div>
             <div id="canvas">
             </div>
-        </div>
 
+        </div>
+        <a href="#" class="btn btn-default" id="background-color">Change background color</a>
         <hr>
         <div class="controls">
 
@@ -100,28 +118,28 @@
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaA-number">
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dA-number">
                     </div>
                     <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="deltaA-range"/>
+                        <input type='range' value="0" min="-50" max="50" id="dA-range" step="0.5"/>
                     </section>
                 </label>
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaB-number">
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dB-number">
                     </div>
                     <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="deltaB-range"/>
+                        <input type='range' value="0" min="-50" max="50" id="dB-range" step="0.5"/>
                     </section>
                 </label>
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="deltaC-number">
+                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dC-number">
                     </div>
                     <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="deltaC-range"/>
+                        <input type='range' value="0" min="-50" max="50" id="dC-range" step="0.5"/>
                     </section>
                 </label>
 
@@ -134,7 +152,37 @@
                 <!--</div>-->
             </div>
 
-            <!--<div class="separator"></div>-->
+            <div class="separator"></div>
+
+            <div class="hsv-sliders form-group">
+            <label>
+                <div class="input-number input-group">
+                    <span class="input-group-addon">△</span>
+                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddA-number">
+                </div>
+                <section  data-shape='slider'>
+                    <input type='range' value="0" min="-50" max="50" id="ddA-range" step="0.5"/>
+                </section>
+            </label>
+            <label>
+                <div class="input-number input-group">
+                    <span class="input-group-addon">△</span>
+                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddB-number">
+                </div>
+                <section  data-shape='slider'>
+                    <input type='range' value="0" min="-50" max="50" id="ddB-range" step="0.5"/>
+                </section>
+            </label>
+            <label>
+                <div class="input-number input-group">
+                    <span class="input-group-addon">△</span>
+                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddC-number">
+                </div>
+                <section  data-shape='slider'>
+                    <input type='range' value="0" min="-50" max="50" id="ddC-range" step="0.5"/>
+                </section>
+            </label>
+            </div>
 
             <!--<div class="form-group">-->
                 <!--<button class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> △△</button>-->
@@ -152,7 +200,7 @@
             <div class="form-group buttons">
                 <div class="input-number input-group">
                     <span class="input-group-addon">#</span>
-                    <input type="number" class="form-control" min="3" value="3" id="colors-number">
+                    <input type="number" class="form-control" min="3" max="10" value="3" id="colors-number">
                 </div>
                 <!--<button class="btn btn-default">Render</button>-->
                 <!--<div class="separator"></div>-->
@@ -177,6 +225,15 @@
 <script>
 $(function () {
     ColorPicker.init();
+
+
+    $(function() {
+        $('#background-color').colorpicker({format: 'rgb', color: '#ffffff'}).on('changeColor', function(e) {
+            $('body')[0].style.backgroundColor = e.color.toString(
+                'rgba');
+        });
+    });
+
 });
 </script>
 

@@ -1,121 +1,130 @@
 @import "slider.scss";
 
-body {
-    padding: 10px;
+.sidebar {
+  padding: 10px;
+}
+.x-p {
+  font-size: xx-large;
+  text-align: center;
+}
+
+.navbar-right {
+  margin-right: 0px;
 }
 
 .input-number {
-    width: 115px;
+  width: 115px;
 }
 
-.canvas {
+#canvas {
+  //overflow-x: scroll;
 }
 
 .sidebar {
-    //width: 500px;
+  //width: 500px;
 }
 
 .focused {
-    //border-bottom: 10px solid #daedf7;
+  //border-bottom: 10px solid #daedf7;
 }
 
 .buttons {
-    width: 300px;
-    display: flex;
+  width: 300px;
+  display: flex;
 
-    #colors-number {
-        width: 70px;
-    }
+  #colors-number {
+    width: 70px;
+  }
 
-    //label, input, button, span {
-    //    float: left;
-    //}
+  //label, input, button, span {
+  //    float: left;
+  //}
 }
 
 .separator {
-    align-self: stretch;
-    border-left: 1px solid #eee;
-    margin-right: 20px;
-    margin-left: 20px;
+  align-self: stretch;
+  border-left: 1px solid #eee;
+  margin-right: 20px;
+  margin-left: 20px;
 
-    width: 1px;
+  width: 1px;
 }
 
 input[type=range].form-control {
-    -webkit-appearance: none;
-    align-self: center;
-    border-right: solid 1.25em transparent;
-    border-left: solid 1.25em transparent;
-    padding: 0;
-    border-radius: .25em;
-    background: transparent;
-    font-size: 1em;
-    cursor: pointer;
+  -webkit-appearance: none;
+  align-self: center;
+  border-right: solid 1.25em transparent;
+  border-left: solid 1.25em transparent;
+  padding: 0;
+  border-radius: .25em;
+  background: transparent;
+  font-size: 1em;
+  cursor: pointer;
 
 }
 
 #color-picker {
-    /*width: 300px;*/
+  /*width: 300px;*/
 }
 
 .hsv-sliders, .delta-sliders {
-    label {
-        display: flex;
-        align-items: baseline;
-        span {
-            //width: 10px;
-            text-align: right;
-            margin-right: 15px;
-        }
+  label {
+    display: flex;
+    align-items: baseline;
+    span {
+      //width: 10px;
+      text-align: right;
+      margin-right: 15px;
     }
-    input[type=number] {
-        width: 70px;
-    }
+  }
+  input[type=number] {
+    width: 70px;
+  }
 
 }
 
 .delta-sliders {
-    //border-left: 1px solid #eee;
-    //padding-left: 25px;
-    //margin-left: 25px;
+  //border-left: 1px solid #eee;
+  //padding-left: 25px;
+  //margin-left: 25px;
 }
 
 .controls {
-    display: flex;
+  display: flex;
 }
 
 // Slider
 .slider.slider-horizontal {
-    top: 5px;
+  top: 5px;
 }
 
 /* Color picker 2x */
 
 .colorpicker-2x .colorpicker-saturation {
-    width: 200px;
-    height: 200px;
+  width: 200px;
+  height: 200px;
 }
 
 .colorpicker-2x .colorpicker-hue,
 .colorpicker-2x .colorpicker-alpha {
-    width: 30px;
-    height: 200px;
+  width: 30px;
+  height: 200px;
 }
 
 .colorpicker-2x .colorpicker-preview,
 .colorpicker-2x .colorpicker-preview div {
-    height: 30px;
-    font-size: 16px;
-    line-height: 160%;
+  height: 30px;
+  font-size: 16px;
+  line-height: 160%;
 }
 
 .colorpicker-saturation .colorpicker-guide,
 .colorpicker-saturation .colorpicker-guide i {
-    height: 10px;
-    width: 10px;
-    border-radius: 10px;
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
 }
 
 .colorpicker-component {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
