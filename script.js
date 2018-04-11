@@ -1,6 +1,33 @@
+// Math
+function factorial(n) {
+    var result = 1;
+    for (var i = 2; i <= n; i++) {
+        result = result * i;
+    }
+    return result;
+}
+
+// △
+// △△
+function triforce(d, i) {
+    var n = i - d;
+
+    if (n < 0) return 0;
+
+    var num = n;
+    var denom = factorial(d+1);
+
+    for (var k = 1; k <= d; k++) {
+        num *= (n + k);
+    }
+
+    return num/denom;
+}
+// isn't it just a binomial coefficient?
+
 var ColorPicker = {
     circles: [],
-    deltas: [[0,0,0], [0,0,0]],
+    deltas: [[0,0,0]],
     init: function () {
         $('#color-picker')
             .colorpicker({
@@ -57,6 +84,55 @@ var ColorPicker = {
     },
 
     addHandlers: function () {
+        // Add and remove deltas
+        $("#remove-deltas").click(function(){
+            ColorPicker.deltas.pop();
+            var deltaId = ColorPicker.deltas.length;
+
+            $('#deltas-'+deltaId).remove();
+            $(".separator:last").remove();
+
+            ColorPicker.updateDButtons();
+            ColorPicker.rerender();
+        });
+
+        $("#add-deltas").click(function(){
+            var deltaId = ColorPicker.deltas.length;
+
+            var $separator = $(templates['separator']());
+            var $deltas = $(templates['deltas']({id: deltaId}));
+
+            $deltas.insertAfter( $("#deltas").find(".separator:last") );
+            $separator.insertAfter( $deltas );
+
+            ColorPicker.deltas.push([0,0,0]);
+
+            // deltas
+            $deltas.find(".dA-range, .dB-range, .dC-range").on('input change', function(){
+
+                ColorPicker.deltas[deltaId] = [
+                    $deltas.find(".dA-range").val(),
+                    $deltas.find(".dB-range").val(),
+                    $deltas.find(".dC-range").val()
+                ];
+                ColorPicker.updateDDeltasInputs(deltaId);
+                ColorPicker.rerender();
+            });
+
+            $deltas.find(".dA-number, .dB-number, .dC-number").on('input change', function(){
+
+                ColorPicker.deltas[deltaId] = [
+                    $deltas.find(".dA-number").val(),
+                    $deltas.find(".dB-number").val(),
+                    $deltas.find(".dC-number").val()
+                ];
+                ColorPicker.updateDDeltasInputs(deltaId);
+                ColorPicker.rerender();
+            });
+
+            // buttons
+            ColorPicker.updateDButtons();
+        });
 
         // HSV
         $("#h-number, #s-number, #v-number").on('input', function(){
@@ -116,25 +192,10 @@ var ColorPicker = {
             ColorPicker.rerender();
         });
 
-        // deltas of deltas
-        $("#ddA-range, #ddB-range, #ddC-range").on('input change', function(){
-
-            ColorPicker.deltas[1] = [$("#ddA-range").val(), $("#ddB-range").val(), $("#ddC-range").val()];
-            ColorPicker.updateDDeltasInputs();
-            ColorPicker.rerender();
-        });
-
-        $("#ddA-number, #ddB-number, #ddC-number").on('input change', function(){
-
-            ColorPicker.deltas[1] = [$("#ddA-number").val(), $("#ddB-number").val(), $("#ddC-number").val()];
-            ColorPicker.updateDDeltasInputs();
-            ColorPicker.rerender();
-        });
-
-        // number
+        // number of colors
         $("#colors-number").on('input', function(){
             ColorPicker.rerender();
-        })
+        });
     },
 
     updateDeltasInputs: function () {
@@ -147,14 +208,22 @@ var ColorPicker = {
         $('#dC-number').val(ColorPicker.deltas[0][2]);
     },
 
-    updateDDeltasInputs: function () {
-        $('#ddA-range').val(ColorPicker.deltas[1][0]);
-        $('#ddB-range').val(ColorPicker.deltas[1][1]);
-        $('#ddC-range').val(ColorPicker.deltas[1][2]);
+    updateDDeltasInputs: function (deltaId) {
+        $('#deltas-'+deltaId).find('.dA-range').val(ColorPicker.deltas[deltaId][0]);
+        $('#deltas-'+deltaId).find('.dB-range').val(ColorPicker.deltas[deltaId][1]);
+        $('#deltas-'+deltaId).find('.dC-range').val(ColorPicker.deltas[deltaId][2]);
 
-        $('#ddA-number').val(ColorPicker.deltas[1][0]);
-        $('#ddB-number').val(ColorPicker.deltas[1][1]);
-        $('#ddC-number').val(ColorPicker.deltas[1][2]);
+        $('#deltas-'+deltaId).find('.dA-number').val(ColorPicker.deltas[deltaId][0]);
+        $('#deltas-'+deltaId).find('.dB-number').val(ColorPicker.deltas[deltaId][1]);
+        $('#deltas-'+deltaId).find('.dC-number').val(ColorPicker.deltas[deltaId][2]);
+    },
+
+    updateDButtons: function() {
+        if (ColorPicker.deltas.length > 1) {
+            $("#remove-deltas").show();
+        } else {
+            $("#remove-deltas").hide();
+        }
     },
 
     HSVtoHSB: function (h, s, v) {
@@ -228,16 +297,6 @@ var ColorPicker = {
 
         var initColor = $('#color-picker').colorpicker().data('colorpicker').color;
 
-        var ds = ColorPicker.deltas[0];
-        var dA = ds[0];
-        var dB = ds[1];
-        var dC = ds[2];
-
-        var dds = ColorPicker.deltas[1];
-        var ddA = dds[0];
-        var ddB = dds[1];
-        var ddC = dds[2];
-
         ColorPicker.circles = [];
         for (var i = 0; i < parseInt($("#colors-number").val()); i++) {
             ColorPicker.circles.push({
@@ -245,10 +304,22 @@ var ColorPicker = {
                 y: 30,
                 r: 30,
                 color: (function(i){
+
+                    // calculate correction term from deltas
+                    var corrections = [0, 0, 0];
+                    for (var n = 0; n < 3; n++) {
+                        for (var d = 0; d < ColorPicker.deltas.length; d++) {
+                            corrections[n] += triforce(d, i) * ColorPicker.deltas[d][n];
+                        }
+                    }
+
                     var color = ColorPicker.HSBtoHSV(initColor.value.h, initColor.value.s, initColor.value.b);
-                    color.h = (color.h + dA * i + ddA * (i - 1)*i/2) % 360; // FIXME: only for H
-                    color.s = color.s + dB * i + ddB * (i - 1)*i/2;
-                    color.v = color.v + dC * i + ddC * (i - 1)*i/2;
+
+                    color.h = (color.h + corrections[0]) % 360; // FIXME: only for H
+
+                    color.s = color.s + corrections[1];
+
+                    color.v = color.v + corrections[2];
 
                     return tinycolor(color).toRgbString();
                 })(i)

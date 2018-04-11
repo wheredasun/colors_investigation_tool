@@ -112,9 +112,9 @@
         </div>
 
         <hr>
-        <div class="controls">
+        <div class="controls" id="deltas">
 
-            <div class="hsv-sliders form-group">
+            <div class="hsv-sliders form-group deltas">
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">△</span>
@@ -154,39 +154,11 @@
 
             <div class="separator"></div>
 
-            <div class="hsv-sliders form-group">
-            <label>
-                <div class="input-number input-group">
-                    <span class="input-group-addon">△</span>
-                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddA-number">
-                </div>
-                <section  data-shape='slider'>
-                    <input type='range' value="0" min="-50" max="50" id="ddA-range" step="0.5"/>
-                </section>
-            </label>
-            <label>
-                <div class="input-number input-group">
-                    <span class="input-group-addon">△</span>
-                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddB-number">
-                </div>
-                <section  data-shape='slider'>
-                    <input type='range' value="0" min="-50" max="50" id="ddB-range" step="0.5"/>
-                </section>
-            </label>
-            <label>
-                <div class="input-number input-group">
-                    <span class="input-group-addon">△</span>
-                    <input type="number" class="form-control" value="0" min="-50" max="50" id="ddC-number">
-                </div>
-                <section  data-shape='slider'>
-                    <input type='range' value="0" min="-50" max="50" id="ddC-range" step="0.5"/>
-                </section>
-            </label>
-            </div>
 
-            <!--<div class="form-group">-->
-                <!--<button class="btn btn-default"><i class="glyphicon glyphicon-plus"></i> △△</button>-->
-            <!--</div>-->
+            <div class="form-group">
+                <button id="add-deltas" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>
+                <button id="remove-deltas" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
+            </div>
         </div>
         <hr>
 
@@ -218,23 +190,63 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.2/d3.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
 
+<!-- Templates -->
+<script id="templates/deltas" type="text/x-handlebars-template">
+    <div class="hsv-sliders form-group deltas" id="deltas-{{ id }}">
+        <label>
+            <div class="input-number input-group">
+                <span class="input-group-addon">△</span>
+                <input type="number" class="form-control dA-number" value="0" min="-50" max="50">
+            </div>
+            <section  data-shape='slider'>
+                <input type='range' value="0" min="-50" max="50" class="dA-range" step="0.5"/>
+            </section>
+        </label>
+        <label>
+            <div class="input-number input-group">
+                <span class="input-group-addon">△</span>
+                <input type="number" class="form-control dB-number" value="0" min="-50" max="50">
+            </div>
+            <section  data-shape='slider'>
+                <input type='range' value="0" min="-50" max="50" class="dB-range" step="0.5"/>
+            </section>
+        </label>
+        <label>
+            <div class="input-number input-group">
+                <span class="input-group-addon">△</span>
+                <input type="number" class="form-control dC-number" value="0" min="-50" max="50">
+            </div>
+            <section  data-shape='slider'>
+                <input type='range' value="0" min="-50" max="50" class="dC-range" step="0.5"/>
+            </section>
+        </label>
+    </div>
+</script>
+
+<script id="templates/separator" type="text/x-handlebars-template">
+    <div class="separator"></div>
+</script>
 
 <!-- Custom -->
-<script src="script.js?123214fdsaz3"></script>
+<script src="script.js"></script>
 <script>
-$(function () {
-    ColorPicker.init();
+    var templates = {
+        'separator': Handlebars.compile(document.getElementById('templates/separator').innerHTML),
+        'deltas': Handlebars.compile(document.getElementById('templates/deltas').innerHTML)
+    };
 
+    $(function () {
+        ColorPicker.init();
 
-    $(function() {
-        $('#background-color').colorpicker({format: 'rgb', color: '#ffffff'}).on('changeColor', function(e) {
-            $('body')[0].style.backgroundColor = e.color.toString(
-                'rgba');
+        $(function() {
+            $('#background-color').colorpicker({format: 'rgb', color: '#ffffff'}).on('changeColor', function(e) {
+                $('body')[0].style.backgroundColor = e.color.toString(
+                    'rgba');
+            });
         });
     });
-
-});
 </script>
 
 </body>
