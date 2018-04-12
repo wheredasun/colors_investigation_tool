@@ -1,5 +1,22 @@
 @import "slider.scss";
 
+// Fix bootstrap
+
+.navbar-right {
+  margin-right: 0px;
+  float: right !important;
+}
+
+.navbar-header {
+  float: left !important;
+}
+
+nav {
+  min-width: 300px;
+}
+
+// Custom styles
+
 .sidebar {
   padding: 10px;
 }
@@ -12,9 +29,14 @@
   display: none;
 }
 
-.navbar-right {
-  margin-right: 0px;
+#color-picker {
+  min-width: 250px;
 }
+
+.controls {
+  overflow-y: auto;
+}
+
 
 .input-number {
   width: 115px;
@@ -71,10 +93,6 @@ input[type=range].form-control {
   font-size: 1em;
   cursor: pointer;
 
-}
-
-#color-picker {
-  /*width: 300px;*/
 }
 
 .hsv-sliders, .delta-sliders {

@@ -98,6 +98,16 @@ input[type='range']:focus {
 input[type=range]::-moz-focus-outer {
   border: 0; }
 
+.navbar-right {
+  margin-right: 0px;
+  float: right !important; }
+
+.navbar-header {
+  float: left !important; }
+
+nav {
+  min-width: 300px; }
+
 .sidebar {
   padding: 10px; }
 
@@ -108,8 +118,11 @@ input[type=range]::-moz-focus-outer {
 #remove-deltas {
   display: none; }
 
-.navbar-right {
-  margin-right: 0px; }
+#color-picker {
+  min-width: 250px; }
+
+.controls {
+  overflow-y: auto; }
 
 .input-number {
   width: 115px; }
@@ -142,9 +155,6 @@ input[type=range].form-control {
   background: transparent;
   font-size: 1em;
   cursor: pointer; }
-
-#color-picker {
-  /*width: 300px;*/ }
 
 .hsv-sliders label, .delta-sliders label {
   display: flex;

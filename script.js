@@ -64,6 +64,19 @@ var ColorPicker = {
         .attr("width", 500)
         .attr("height", 210),
 
+    HSVtoRGB: function (h, s, v) {
+      return ColorPicker.space.hsv.rgb([h, s, v]);
+    },
+
+    map: function (fn, list) {
+        var i = 0,
+            result = [];
+        for (i = 0; i < list.length; i++) {
+            result.push(fn(list[i]));
+        }
+        return result;
+    },
+
     renderColors: function() {
 
         var circles = ColorPicker.canvas.selectAll("circle")
@@ -78,7 +91,11 @@ var ColorPicker = {
             .attr("cx", function (d) { return d.x; })
             .attr("cy", function (d) { return d.y; })
             .attr("r", function (d) { return d.r; })
-            .style("fill", function(d) { return d.color; });
+            .style("fill", function(d) { return "rgb(" + ColorPicker.map(Math.round, ColorPicker.HSVtoRGB(
+                d.color.h,
+                d.color.s,
+                d.color.v
+            )) + ")"; });
 
 
 
@@ -88,8 +105,8 @@ var ColorPicker = {
         $('#color-picker .line').remove();
 
         for (var i = 1; i < ColorPicker.circles.length; i++) {
-            var previousColor = tinycolor(ColorPicker.circles[i-1].color).toHsv(); // hsb
-            var color = tinycolor(ColorPicker.circles[i].color).toHsv(); // hsb
+            var previousColor = ColorPicker.circles[i-1].color;
+            var color = ColorPicker.circles[i].color;
 
             if (color.h !== previousColor.h) {
                 var $line = $("<span class='line'></span>");
@@ -101,8 +118,8 @@ var ColorPicker = {
                 var $dot = $("<span class='dot'><b></b></span>");
                 $('#color-picker .colorpicker-saturation').append($dot);
                 $dot.css({
-                    'top': (200 - color.v * 200) + "px",
-                    'left': (color.s * 200) + "px"
+                    'top': (200 - color.v / 100 * 200) + "px",
+                    'left': (color.s / 100 * 200) + "px"
                 });
             }
         }
@@ -423,11 +440,11 @@ var ColorPicker = {
                     if (v < 0) v = 0;
                     if (v > 100) v = 100;
 
-                    return tinycolor({
+                    return {
                         h: h,
-                        s: s + "%",
-                        v: v + "%"
-                    }).toRgbString();
+                        s: s,
+                        v: v
+                    };
                 })(i)
             })
         }
