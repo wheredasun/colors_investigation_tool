@@ -103,6 +103,11 @@ input[type=range].form-control {
 }
 
 /* Color picker 2x */
+.colorpicker-2x .colorpicker-saturation {
+  i {
+    margin: -2.5px 0 0 -2.5px;
+  }
+}
 
 .colorpicker-2x .colorpicker-saturation {
   width: 200px;
@@ -131,4 +136,43 @@ input[type=range].form-control {
 
 .colorpicker-component {
   margin-bottom: 10px;
+}
+
+.dot {
+  display: block;
+  height: 4px;
+  width: 4px;
+  border: 1px solid #000;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+
+  margin-top: -1px;
+  margin-left: -1px;
+
+  b {
+    display: block;
+    height: 5px;
+    width: 5px;
+    border: 1px solid #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+}
+
+.line {
+  display: block;
+  height: 1px;
+  background: #000;
+  border-top: 1px solid #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  margin-top: -1px;
 }

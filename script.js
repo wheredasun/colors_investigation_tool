@@ -81,6 +81,33 @@ var ColorPicker = {
             .attr("r", function (d) { return d.r; })
             .style("fill", function(d) { return d.color; });
 
+
+
+        // refactor to d3
+
+        $('#color-picker .dot').remove();
+        $('#color-picker .line').remove();
+
+        for (var i = 1; i < ColorPicker.circles.length; i++) {
+            var previousColor = tinycolor(ColorPicker.circles[i-1].color).toHsv(); // hsb
+            var color = tinycolor(ColorPicker.circles[i].color).toHsv(); // hsb
+
+            if (color.h !== previousColor.h) {
+                var $line = $("<span class='line'></span>");
+                $('#color-picker .colorpicker-hue').append($line);
+                $line.css('top', (200 - color.h / 360 * 200) + "px");
+            }
+
+            if (color.v !== previousColor.v || color.s !== previousColor.s) {
+                var $dot = $("<span class='dot'><b></b></span>");
+                $('#color-picker .colorpicker-saturation').append($dot);
+                $dot.css({
+                    'top': (200 - color.v * 200) + "px",
+                    'left': (color.s * 200) + "px"
+                });
+            }
+        }
+
     },
 
     addHandlers: function () {
