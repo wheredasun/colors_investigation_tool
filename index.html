@@ -109,6 +109,38 @@
                 </label>
             </div>
 
+            <div class="separator"></div>
+
+            <div class="hsv-sliders form-group">
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">L</span>
+                        <input type="number" class="form-control" id="lchab-l-number" min="0" max="100">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="lchab-l-range" min="0" max="100" step="1"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">C</span>
+                        <input type="number" class="form-control" id="lchab-c-number" min="0" max="100">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="lchab-c-range" min="0" max="100" step="1"/>
+                    </section>
+                </label>
+                <label>
+                    <div class="input-number input-group">
+                        <span class="input-group-addon">H</span>
+                        <input type="number" class="form-control" id="lchab-h-number" min="0" max="360">
+                    </div>
+                    <section  data-shape='slider'>
+                        <input type='range' id="lchab-h-range" min="0" max="360" step="1"/>
+                    </section>
+                </label>
+            </div>
+
         </div>
 
         <hr>
@@ -160,6 +192,9 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/tinycolor/1.4.1/tinycolor.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/regression/1.4.0/regression.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
+
+<!-- Vendor local-->
+<script src="color-space.js"></script>
 
 <!-- Templates -->
 <script id="templates/deltas" type="text/x-handlebars-template">

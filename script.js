@@ -28,13 +28,13 @@ function triforce(d, i) {
 var ColorPicker = {
     circles: [],
     deltas: [],
+    space: require('color-space'),
     init: function () {
         $('#color-picker')
             .colorpicker({
                 color: '#c8a2ff',
                 inline: true,
                 container: true,
-                // alpha: false,
                 format: 'rgb',
                 customClass: 'colorpicker-2x',
                 sliders: {
@@ -45,9 +45,6 @@ var ColorPicker = {
                     hue: {
                         maxTop: 200
                     }
-                    // alpha: {
-                    //     maxTop: 200
-                    // }
                 }
             })
             .on('changeColor', function (e) {
@@ -226,20 +223,57 @@ var ColorPicker = {
                 ].join(''))
         });
 
-        // deltas
-        $("#dA-range, #dB-range, #dC-range").on('input change', function(){
-
-            ColorPicker.deltas[0] = [$("#dA-range").val(), $("#dB-range").val(), $("#dC-range").val()];
-            ColorPicker.updateDeltasInputs();
-            ColorPicker.rerender();
+        // LCH
+        $("#lchab-l-number, #lchab-c-number, #lchab-h-number").on('input', function(){
+            var color = ColorPicker.space.hsv.rgb(ColorPicker.space.lchab.hsv([
+                (parseInt($("#lchab-l-number").val())),
+                (parseInt($("#lchab-c-number").val())),
+                (parseInt($("#lchab-h-number").val()))
+            ]));
+            $('#color-picker').colorpicker('setValue',
+                [
+                    "rgb(",
+                    Math.round(color[0]),
+                    ",",
+                    Math.round(color[1]),
+                    ",",
+                    Math.round(color[2]),
+                    ")"
+                ].join(''))
+        });
+        $("#lchab-l-range, #lchab-c-range, #lchab-h-range").on('input change', function(){
+            var color = ColorPicker.space.hsv.rgb(ColorPicker.space.lchab.hsv([
+                (parseInt($("#lchab-l-range").val())),
+                (parseInt($("#lchab-c-range").val())),
+                (parseInt($("#lchab-h-range").val()))
+            ]));
+            $('#color-picker').colorpicker('setValue',
+                [
+                    "rgb(",
+                    Math.round(color[0]),
+                    ",",
+                    Math.round(color[1]),
+                    ",",
+                    Math.round(color[2]),
+                    ")"
+                ].join(''))
         });
 
-        $("#dA-number, #dB-number, #dC-number").on('input change', function(){
 
-            ColorPicker.deltas[0] = [$("#dA-number").val(), $("#dB-number").val(), $("#dC-number").val()];
-            ColorPicker.updateDeltasInputs();
-            ColorPicker.rerender();
-        });
+        // // deltas
+        // $("#dA-range, #dB-range, #dC-range").on('input change', function(){
+        //
+        //     ColorPicker.deltas[0] = [$("#dA-range").val(), $("#dB-range").val(), $("#dC-range").val()];
+        //     ColorPicker.updateDeltasInputs();
+        //     ColorPicker.rerender();
+        // });
+        //
+        // $("#dA-number, #dB-number, #dC-number").on('input change', function(){
+        //
+        //     ColorPicker.deltas[0] = [$("#dA-number").val(), $("#dB-number").val(), $("#dC-number").val()];
+        //     ColorPicker.updateDeltasInputs();
+        //     ColorPicker.rerender();
+        // });
 
         // number of colors
         $("#colors-number").on('input', function(){
@@ -247,15 +281,15 @@ var ColorPicker = {
         });
     },
 
-    updateDeltasInputs: function () {
-        $('#dA-range').val(ColorPicker.deltas[0][0]);
-        $('#dB-range').val(ColorPicker.deltas[0][1]);
-        $('#dC-range').val(ColorPicker.deltas[0][2]);
-
-        $('#dA-number').val(ColorPicker.deltas[0][0]);
-        $('#dB-number').val(ColorPicker.deltas[0][1]);
-        $('#dC-number').val(ColorPicker.deltas[0][2]);
-    },
+    // updateDeltasInputs: function () {
+    //     $('#dA-range').val(ColorPicker.deltas[0][0]);
+    //     $('#dB-range').val(ColorPicker.deltas[0][1]);
+    //     $('#dC-range').val(ColorPicker.deltas[0][2]);
+    //
+    //     $('#dA-number').val(ColorPicker.deltas[0][0]);
+    //     $('#dB-number').val(ColorPicker.deltas[0][1]);
+    //     $('#dC-number').val(ColorPicker.deltas[0][2]);
+    // },
 
     updateDDeltasInputs: function (deltaId) {
         $('#deltas-'+deltaId).find('.dA-range').val(ColorPicker.deltas[deltaId][0]);
@@ -338,6 +372,20 @@ var ColorPicker = {
         $("#g-range").val(rgb.g);
         $("#b-range").val(rgb.b);
 
+        // LCH
+        var lch = ColorPicker.space.hsv.lchab(ColorPicker.space.rgb.hsv([rgb.r, rgb.g, rgb.b]));
+        // > ColorPicker.space.lchab.rgb(ColorPicker.space.rgb.lchab([10,10,10]))
+        // (3) [17.97040266381234, 6.587820188987336, 14.176387850654045]
+        // > ColorPicker.space.lchab.hsv(ColorPicker.space.hsv.rgb((ColorPicker.space.rgb.hsv(ColorPicker.space.hsv.lchab([10,10,10])))))
+        // (3) [9.91023551682196, 9.971386816411227, 9.999113388843941]
+
+        $("#lchab-l-number").val(Math.round(Math.round(lch[0])));
+        $("#lchab-c-number").val(Math.round(Math.round(lch[1])));
+        $("#lchab-h-number").val(Math.round(Math.round(lch[2])));
+
+        $("#lchab-l-range").val(Math.round(Math.round(lch[0])));
+        $("#lchab-c-range").val(Math.round(Math.round(lch[1])));
+        $("#lchab-h-range").val(Math.round(Math.round(lch[2])));
 
         ColorPicker.rerender();
 
