@@ -114,6 +114,11 @@ input[type=range]::-moz-focus-outer {
 .input-number {
   width: 115px; }
 
+.range-reset {
+  top: -8px;
+  left: 8px;
+  cursor: pointer; }
+
 .buttons {
   width: 300px;
   display: flex; }

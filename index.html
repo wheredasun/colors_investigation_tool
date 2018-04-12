@@ -114,46 +114,15 @@
         <hr>
         <div class="controls" id="deltas">
 
-            <div class="hsv-sliders form-group deltas">
-                <label>
-                    <div class="input-number input-group">
-                        <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dA-number">
-                    </div>
-                    <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="dA-range" step="0.5"/>
-                    </section>
-                </label>
-                <label>
-                    <div class="input-number input-group">
-                        <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dB-number">
-                    </div>
-                    <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="dB-range" step="0.5"/>
-                    </section>
-                </label>
-                <label>
-                    <div class="input-number input-group">
-                        <span class="input-group-addon">△</span>
-                        <input type="number" class="form-control" value="0" min="-50" max="50" id="dC-number">
-                    </div>
-                    <section  data-shape='slider'>
-                        <input type='range' value="0" min="-50" max="50" id="dC-range" step="0.5"/>
-                    </section>
-                </label>
+            <div class="separator" style="display: none;"></div>
 
-                <!--<div class="form-group">-->
-                    <!--<label>Apply deltas to:</label>-->
-                    <!--<select class="form-control">-->
-                        <!--<option>HSV</option>-->
-                        <!--<option>RGB</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-            </div>
-
-            <div class="separator"></div>
-
+            <!--<div class="form-group">-->
+            <!--<label>Apply deltas to:</label>-->
+            <!--<select class="form-control">-->
+            <!--<option>HSV</option>-->
+            <!--<option>RGB</option>-->
+            <!--</select>-->
+            <!--</div>-->
 
             <div class="form-group">
                 <button id="add-deltas" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>
@@ -203,6 +172,9 @@
             <section  data-shape='slider'>
                 <input type='range' value="0" min="-50" max="50" class="dA-range" step="0.5"/>
             </section>
+            <div>
+                <i class="glyphicon glyphicon-erase range-reset"></i>
+            </div>
         </label>
         <label>
             <div class="input-number input-group">
@@ -212,6 +184,9 @@
             <section  data-shape='slider'>
                 <input type='range' value="0" min="-50" max="50" class="dB-range" step="0.5"/>
             </section>
+            <div>
+                <i class="glyphicon glyphicon-erase range-reset"></i>
+            </div>
         </label>
         <label>
             <div class="input-number input-group">
@@ -221,7 +196,11 @@
             <section  data-shape='slider'>
                 <input type='range' value="0" min="-50" max="50" class="dC-range" step="0.5"/>
             </section>
+            <div>
+                <i class="glyphicon glyphicon-erase range-reset"></i>
+            </div>
         </label>
+        <button class="btn btn-default reset"><i class="glyphicon glyphicon-erase"></i></button>
     </div>
 </script>
 

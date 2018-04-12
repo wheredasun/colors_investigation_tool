@@ -27,7 +27,7 @@ function triforce(d, i) {
 
 var ColorPicker = {
     circles: [],
-    deltas: [[0,0,0]],
+    deltas: [],
     init: function () {
         $('#color-picker')
             .colorpicker({
@@ -54,6 +54,8 @@ var ColorPicker = {
                 ColorPicker.updateSliders(e.color);
 
             });
+
+        ColorPicker.addDeltas();
 
         ColorPicker.addHandlers();
 
@@ -110,6 +112,62 @@ var ColorPicker = {
 
     },
 
+    addDeltas: function () {
+        var deltaId = ColorPicker.deltas.length;
+
+        var $separator = $(templates['separator']());
+        var $deltas = $(templates['deltas']({id: deltaId}));
+
+        $deltas.insertAfter( $("#deltas").find(".separator:last") );
+        $separator.insertAfter( $deltas );
+
+        ColorPicker.deltas.push([0,0,0]);
+
+        // deltas
+        $deltas.find(".reset").click(function() {
+            ColorPicker.deltas[deltaId] = [
+                0,
+                0,
+                0
+            ];
+            ColorPicker.updateDDeltasInputs(deltaId);
+            ColorPicker.rerender();
+        });
+
+        $deltas.find(".range-reset").each(function(i, el){
+            $(el).click(function(){
+                ColorPicker.deltas[deltaId][i] = 0;
+                ColorPicker.updateDDeltasInputs(deltaId);
+                ColorPicker.rerender();
+            });
+        });
+
+        $deltas.find(".dA-range, .dB-range, .dC-range").on('input change', function(){
+
+            ColorPicker.deltas[deltaId] = [
+                $deltas.find(".dA-range").val(),
+                $deltas.find(".dB-range").val(),
+                $deltas.find(".dC-range").val()
+            ];
+            ColorPicker.updateDDeltasInputs(deltaId);
+            ColorPicker.rerender();
+        });
+
+        $deltas.find(".dA-number, .dB-number, .dC-number").on('input change', function(){
+
+            ColorPicker.deltas[deltaId] = [
+                $deltas.find(".dA-number").val(),
+                $deltas.find(".dB-number").val(),
+                $deltas.find(".dC-number").val()
+            ];
+            ColorPicker.updateDDeltasInputs(deltaId);
+            ColorPicker.rerender();
+        });
+
+        // buttons
+        ColorPicker.updateDButtons();
+    },
+
     addHandlers: function () {
         // Add and remove deltas
         $("#remove-deltas").click(function(){
@@ -123,43 +181,7 @@ var ColorPicker = {
             ColorPicker.rerender();
         });
 
-        $("#add-deltas").click(function(){
-            var deltaId = ColorPicker.deltas.length;
-
-            var $separator = $(templates['separator']());
-            var $deltas = $(templates['deltas']({id: deltaId}));
-
-            $deltas.insertAfter( $("#deltas").find(".separator:last") );
-            $separator.insertAfter( $deltas );
-
-            ColorPicker.deltas.push([0,0,0]);
-
-            // deltas
-            $deltas.find(".dA-range, .dB-range, .dC-range").on('input change', function(){
-
-                ColorPicker.deltas[deltaId] = [
-                    $deltas.find(".dA-range").val(),
-                    $deltas.find(".dB-range").val(),
-                    $deltas.find(".dC-range").val()
-                ];
-                ColorPicker.updateDDeltasInputs(deltaId);
-                ColorPicker.rerender();
-            });
-
-            $deltas.find(".dA-number, .dB-number, .dC-number").on('input change', function(){
-
-                ColorPicker.deltas[deltaId] = [
-                    $deltas.find(".dA-number").val(),
-                    $deltas.find(".dB-number").val(),
-                    $deltas.find(".dC-number").val()
-                ];
-                ColorPicker.updateDDeltasInputs(deltaId);
-                ColorPicker.rerender();
-            });
-
-            // buttons
-            ColorPicker.updateDButtons();
-        });
+        $("#add-deltas").click(ColorPicker.addDeltas);
 
         // HSV
         $("#h-number, #s-number, #v-number").on('input', function(){
