@@ -317,21 +317,20 @@ var ColorPicker = {
 
                     var h = (color.h + corrections[0]) % 360; // FIXME: only for H
                     if (h < 0) h = 360 + h;
-                    color.h = h;
 
                     var s = color.s + corrections[1];
                     if (s < 0) s = 0;
                     if (s > 100) s = 100;
-                    color.s = s;
 
                     var v = color.v + corrections[2];
                     if (v < 0) v = 0;
                     if (v > 100) v = 100;
-                    color.v = v;
 
-                    console.log(h, s, v);
-
-                    return tinycolor(color).toRgbString();
+                    return tinycolor({
+                        h: h,
+                        s: s + "%",
+                        v: v + "%"
+                    }).toRgbString();
                 })(i)
             })
         }
