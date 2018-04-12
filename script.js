@@ -315,11 +315,21 @@ var ColorPicker = {
 
                     var color = ColorPicker.HSBtoHSV(initColor.value.h, initColor.value.s, initColor.value.b);
 
-                    color.h = (color.h + corrections[0]) % 360; // FIXME: only for H
+                    var h = (color.h + corrections[0]) % 360; // FIXME: only for H
+                    if (h < 0) h = 360 + h;
+                    color.h = h;
 
-                    color.s = color.s + corrections[1];
+                    var s = color.s + corrections[1];
+                    if (s < 0) s = 0;
+                    if (s > 100) s = 100;
+                    color.s = s;
 
-                    color.v = color.v + corrections[2];
+                    var v = color.v + corrections[2];
+                    if (v < 0) v = 0;
+                    if (v > 100) v = 100;
+                    color.v = v;
+
+                    console.log(h, s, v);
 
                     return tinycolor(color).toRgbString();
                 })(i)
