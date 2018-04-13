@@ -124,6 +124,9 @@ nav {
 .controls {
   overflow-y: auto; }
 
+.deltas-buttons {
+  min-width: 100px; }
+
 .input-number {
   width: 115px; }
 

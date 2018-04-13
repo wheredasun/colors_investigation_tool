@@ -293,6 +293,12 @@ var ColorPicker = {
         $("#colors-number").on('input', function(){
             ColorPicker.rerender();
         });
+
+        // color space selector
+        $('#color-space').on('change', function(){
+            ColorPicker.rerender();
+        });
+
     },
 
     // updateDeltasInputs: function () {
@@ -409,6 +415,8 @@ var ColorPicker = {
 
         var initColor = $('#color-picker').colorpicker().data('colorpicker').color;
 
+        var colorSpace = $('#color-space').val();
+
         ColorPicker.circles = [];
         for (var i = 0; i < parseInt($("#colors-number").val()); i++) {
             ColorPicker.circles.push({
@@ -425,24 +433,74 @@ var ColorPicker = {
                         }
                     }
 
-                    var color = ColorPicker.HSBtoHSV(initColor.value.h, initColor.value.s, initColor.value.b);
+                    switch (colorSpace) {
+                        case "HSV":
+                            var color = ColorPicker.HSBtoHSV(initColor.value.h, initColor.value.s, initColor.value.b);
 
-                    var h = (color.h + corrections[0]) % 360; // FIXME: only for H
-                    if (h < 0) h = 360 + h;
+                            var h = (color.h + corrections[0]) % 360; // only for H
+                            if (h < 0) h = 360 + h;
 
-                    var s = color.s + corrections[1];
-                    if (s < 0) s = 0;
-                    if (s > 100) s = 100;
+                            var s = color.s + corrections[1];
+                            if (s < 0) s = 0;
+                            if (s > 100) s = 100;
 
-                    var v = color.v + corrections[2];
-                    if (v < 0) v = 0;
-                    if (v > 100) v = 100;
+                            var v = color.v + corrections[2];
+                            if (v < 0) v = 0;
+                            if (v > 100) v = 100;
 
-                    return {
-                        h: h,
-                        s: s,
-                        v: v
-                    };
+                            return {
+                                h: h,
+                                s: s,
+                                v: v
+                            };
+
+                        case "RGB":
+                            var color = initColor.toRGB();
+
+                            var r = color.r + corrections[0];
+                            if (r < 0) r = 0;
+                            if (r > 255) r = 255;
+
+                            var g = color.g + corrections[1];
+                            if (g < 0) g = 0;
+                            if (g > 255) g = 255;
+
+                            var b = color.b + corrections[2];
+                            if (b < 0) b = 0;
+                            if (b > 255) b = 255;
+
+                            color = ColorPicker.space.rgb.hsv([r, g, b]);
+                            return {
+                                h: color[0],
+                                s: color[1],
+                                v: color[2]
+                            };
+
+                        case "LCH":
+                            var lch = ColorPicker.space.hsv.lchab([
+                                initColor.value.h * 360, initColor.value.s * 100, initColor.value.b * 100
+                            ]);
+
+                            var l = lch[0] + corrections[0];
+                            if (l < 0) l = 0;
+                            if (l > 100) l = 100;
+
+                            var c = lch[1] + corrections[1];
+                            if (c < 0) c = 0;
+                            if (c > 100) c = 100;
+
+                            var h = (lch[2] + corrections[2]) % 360; // only for H
+                            if (h < 0) h = 360 + h;
+
+                            color = ColorPicker.space.lchab.hsv([l, c, h]);
+
+                            return {
+                                h: color[0],
+                                s: color[1],
+                                v: color[2]
+                            };
+                    }
+
                 })(i)
             })
         }

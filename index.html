@@ -141,6 +141,7 @@
                 </label>
             </div>
 
+
         </div>
 
         <hr>
@@ -148,18 +149,20 @@
 
             <div class="separator" style="display: none;"></div>
 
-            <!--<div class="form-group">-->
-            <!--<label>Apply deltas to:</label>-->
-            <!--<select class="form-control">-->
-            <!--<option>HSV</option>-->
-            <!--<option>RGB</option>-->
-            <!--</select>-->
-            <!--</div>-->
 
-            <div class="form-group">
+
+            <div class="form-group deltas-buttons">
                 <button id="add-deltas" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></button>
                 <button id="remove-deltas" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
+                <hr>
+                <select class="form-control" id="color-space">
+                    <option value="HSV">HSV</option>
+                    <option value="RGB">RGB</option>
+                    <option value="LCH">LCH</option>
+                </select>
             </div>
+
+
         </div>
         <hr>
 
