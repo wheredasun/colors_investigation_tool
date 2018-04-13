@@ -7,6 +7,10 @@ function factorial(n) {
     return result;
 }
 
+function roundHalf(num) {
+    return Math.round(num*2)/2;
+}
+
 // △
 // △△
 function triforce(d, i) {
@@ -242,38 +246,31 @@ var ColorPicker = {
 
         // LCH
         $("#lchab-l-number, #lchab-c-number, #lchab-h-number").on('input', function(){
-            var color = ColorPicker.space.hsv.rgb(ColorPicker.space.lchab.hsv([
-                (parseInt($("#lchab-l-number").val())),
-                (parseInt($("#lchab-c-number").val())),
-                (parseInt($("#lchab-h-number").val()))
-            ]));
-            $('#color-picker').colorpicker('setValue',
-                [
-                    "rgb(",
-                    Math.round(color[0]),
-                    ",",
-                    Math.round(color[1]),
-                    ",",
-                    Math.round(color[2]),
-                    ")"
-                ].join(''))
+            var color = ColorPicker.space.lchab.hsv([
+                parseInt($("#lchab-l-number").val()),
+                parseInt($("#lchab-c-number").val()),
+                parseInt($("#lchab-h-number").val())
+            ]);
+            // console.log(color);
+            // $('#color-picker').colorpicker('setValue',
+            //         "rgb(" + color + ")");
+            $('#color-picker').colorpicker('setValue', {
+                h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
+            });
         });
         $("#lchab-l-range, #lchab-c-range, #lchab-h-range").on('input change', function(){
-            var color = ColorPicker.space.hsv.rgb(ColorPicker.space.lchab.hsv([
-                (parseInt($("#lchab-l-range").val())),
-                (parseInt($("#lchab-c-range").val())),
-                (parseInt($("#lchab-h-range").val()))
-            ]));
-            $('#color-picker').colorpicker('setValue',
-                [
-                    "rgb(",
-                    Math.round(color[0]),
-                    ",",
-                    Math.round(color[1]),
-                    ",",
-                    Math.round(color[2]),
-                    ")"
-                ].join(''))
+            var color = ColorPicker.space.lchab.hsv([
+                parseInt($("#lchab-l-range").val()),
+                parseInt($("#lchab-c-range").val()),
+                parseInt($("#lchab-h-range").val())
+            ]);
+            // $('#color-picker').colorpicker('setValue',
+            //         "rgb(" + color + ")");
+
+            $('#color-picker').colorpicker('setValue', {
+                h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
+            });
+
         });
 
 
@@ -390,19 +387,20 @@ var ColorPicker = {
         $("#b-range").val(rgb.b);
 
         // LCH
-        var lch = ColorPicker.space.hsv.lchab(ColorPicker.space.rgb.hsv([rgb.r, rgb.g, rgb.b]));
-        // > ColorPicker.space.lchab.rgb(ColorPicker.space.rgb.lchab([10,10,10]))
-        // (3) [17.97040266381234, 6.587820188987336, 14.176387850654045]
-        // > ColorPicker.space.lchab.hsv(ColorPicker.space.hsv.rgb((ColorPicker.space.rgb.hsv(ColorPicker.space.hsv.lchab([10,10,10])))))
-        // (3) [9.91023551682196, 9.971386816411227, 9.999113388843941]
+        var lch = ColorPicker.space.hsv.lchab([
+            color.value.h * 360, color.value.s * 100, color.value.b * 100
+        ]);
+        lch[0] = roundHalf(lch[0]);
+        lch[1] = roundHalf(lch[1]);
+        lch[2] = Math.round(lch[2]);
 
-        $("#lchab-l-number").val(Math.round(Math.round(lch[0])));
-        $("#lchab-c-number").val(Math.round(Math.round(lch[1])));
-        $("#lchab-h-number").val(Math.round(Math.round(lch[2])));
+        $("#lchab-l-number").val(lch[0]);
+        $("#lchab-c-number").val(lch[1]);
+        $("#lchab-h-number").val(lch[2]);
 
-        $("#lchab-l-range").val(Math.round(Math.round(lch[0])));
-        $("#lchab-c-range").val(Math.round(Math.round(lch[1])));
-        $("#lchab-h-range").val(Math.round(Math.round(lch[2])));
+        $("#lchab-l-range").val(lch[0]);
+        $("#lchab-c-range").val(lch[1]);
+        $("#lchab-h-range").val(lch[2]);
 
         ColorPicker.rerender();
 
