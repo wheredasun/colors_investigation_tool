@@ -104,7 +104,6 @@ var ColorPicker = {
 
 
         // refactor to d3
-
         $('#color-picker .dot').remove();
         $('#color-picker .line').remove();
 
@@ -126,6 +125,31 @@ var ColorPicker = {
                     'left': (color.s / 100 * 200) + "px"
                 });
             }
+        }
+
+        // render export canvases
+        var canvas1x = document.getElementById("export-1x");
+        var ctx1x = canvas1x.getContext("2d");
+        ctx1x.clearRect(0, 0, canvas1x.width, canvas1x.height);
+
+        var canvas2x = document.getElementById("export-2x");
+        var ctx2x = canvas2x.getContext("2d");
+        ctx2x.clearRect(0, 0, canvas2x.width, canvas2x.height);
+
+        for (var i = 0; i < ColorPicker.circles.length; i++) {
+            var d =  ColorPicker.circles[i];
+            var color = "rgb(" + ColorPicker.map(Math.round, ColorPicker.HSVtoRGB(
+                d.color.h,
+                d.color.s,
+                d.color.v
+            )) + ")";
+
+            ctx1x.fillStyle = color;
+            ctx1x.fillRect(i, 6, 1, 1);
+
+            ctx2x.fillStyle = color;
+            ctx2x.fillRect(i * 2, 5, 2, 2);
+
         }
 
     },
@@ -273,22 +297,6 @@ var ColorPicker = {
 
         });
 
-
-        // // deltas
-        // $("#dA-range, #dB-range, #dC-range").on('input change', function(){
-        //
-        //     ColorPicker.deltas[0] = [$("#dA-range").val(), $("#dB-range").val(), $("#dC-range").val()];
-        //     ColorPicker.updateDeltasInputs();
-        //     ColorPicker.rerender();
-        // });
-        //
-        // $("#dA-number, #dB-number, #dC-number").on('input change', function(){
-        //
-        //     ColorPicker.deltas[0] = [$("#dA-number").val(), $("#dB-number").val(), $("#dC-number").val()];
-        //     ColorPicker.updateDeltasInputs();
-        //     ColorPicker.rerender();
-        // });
-
         // number of colors
         $("#colors-number").on('input', function(){
             ColorPicker.rerender();
@@ -300,16 +308,6 @@ var ColorPicker = {
         });
 
     },
-
-    // updateDeltasInputs: function () {
-    //     $('#dA-range').val(ColorPicker.deltas[0][0]);
-    //     $('#dB-range').val(ColorPicker.deltas[0][1]);
-    //     $('#dC-range').val(ColorPicker.deltas[0][2]);
-    //
-    //     $('#dA-number').val(ColorPicker.deltas[0][0]);
-    //     $('#dB-number').val(ColorPicker.deltas[0][1]);
-    //     $('#dC-number').val(ColorPicker.deltas[0][2]);
-    // },
 
     updateDDeltasInputs: function (deltaId) {
         $('#deltas-'+deltaId).find('.dA-range').val(ColorPicker.deltas[deltaId][0]);
