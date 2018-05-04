@@ -106,14 +106,15 @@ html {
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 50px; }
+  margin-bottom: 80px; }
 
 .footer {
   position: absolute;
   bottom: 0;
+  padding-top: 10px;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 50px;
+  height: 80px;
   background-color: #f5f5f5;
   display: flex;
   align-items: center; }
@@ -122,7 +123,7 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 body > .container {
-  padding: 50px 15px 0; }
+  padding: 80px 15px 0; }
 
 .container .text-muted {
   margin: 20px 0; }
@@ -137,8 +138,77 @@ code {
   font-size: 80%; }
 
 .lchPicker-component {
-  width: 200px;
-  height: 200px; }
+  display: inline-block;
+  position: relative;
+  float: none;
+  z-index: auto;
+  padding: 4px;
+  min-width: 130px;
+  margin-top: 1px;
+  border-radius: 4px; }
+  .lchPicker-component .lc {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    cursor: crosshair;
+    float: left; }
+  .lchPicker-component .lc-inner {
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: 100;
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.1), inset -1px -1px 1px rgba(0, 0, 0, 0.1); }
+    .lchPicker-component .lc-inner i {
+      display: block;
+      height: 5px;
+      width: 5px;
+      border: 1px solid #000;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: -2.5px 0 0 -2.5px; }
+      .lchPicker-component .lc-inner i b {
+        display: block;
+        height: 5px;
+        width: 5px;
+        border: 1px solid #fff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px; }
+  .lchPicker-component .h {
+    width: 30px;
+    height: 200px;
+    position: relative;
+    float: left;
+    cursor: row-resize;
+    margin-left: 4px;
+    margin-bottom: 4px; }
+    .lchPicker-component .h i {
+      display: block;
+      height: 1px;
+      background: #000;
+      border-top: 1px solid #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin-top: -1px; }
+  .lchPicker-component .color {
+    height: 10px;
+    margin-top: 5px;
+    clear: both;
+    position: relative; }
+    .lchPicker-component .color div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 10px;
+      width: 100%; }
 
 .navbar-right {
   margin-right: 0px;

@@ -1,4 +1,100 @@
 .lchPicker-component {
-  width: 200px;
-  height: 200px;
+  display: inline-block;
+
+  position: relative;
+  float: none;
+  z-index: auto;
+
+  padding: 4px;
+  min-width: 130px;
+  margin-top: 1px;
+
+  border-radius: 4px;
+
+  .lc {
+    width: 200px;
+    height: 200px;
+
+    position: relative;
+    cursor: crosshair;
+
+    float: left;
+
+  }
+
+  .lc-inner {
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: 100;
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.1), inset -1px -1px 1px rgba(0, 0, 0, 0.1);
+
+    i {
+      display: block;
+      height: 5px;
+      width: 5px;
+      border: 1px solid #000;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: -2.5px 0 0 -2.5px;
+
+      b {
+        display: block;
+        height: 5px;
+        width: 5px;
+        border: 1px solid #fff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+      }
+    }
+  }
+
+
+  .h {
+    width: 30px;
+    height: 200px;
+
+    position: relative;
+
+    float: left;
+    cursor: row-resize;
+    margin-left: 4px;
+    margin-bottom: 4px;
+
+    i {
+      display: block;
+      height: 1px;
+      background: #000;
+      border-top: 1px solid #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      margin-top: -1px;
+    }
+  }
+
+  .color {
+    height: 10px;
+    margin-top: 5px;
+    clear: both;
+
+    position: relative;
+
+    div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 10px;
+      width: 100%;
+    }
+  }
+
 }

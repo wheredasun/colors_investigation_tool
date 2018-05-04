@@ -39,7 +39,7 @@
             <div id="color-picker" class="input-group colorpicker-component">
             </div>
             <div class="separator"></div>
-            <div id="lch-picker" class="input-group lchPicker-component">
+            <div id="lch-picker" class="input-group">
             </div>
             <div class="separator"></div>
             <div id="canvas">
@@ -203,7 +203,8 @@
 
     <footer class="footer">
         <div class="container">
-            Tool for investigating color distances? spaces? for creating palettes? based on an idea by <em title="🐍">Tritanopia</em>.
+            <p>Tool for investigating color distances? spaces? for creating palettes? based on an idea by <em title="🐍">Tritanopia</em>.</p>
+            <p>This site is <a href="https://github.com/wheredasun/colors_investigation_tool">open source</a>, zero rights reserved.</p>
         </div>
     </footer>
 
@@ -280,7 +281,9 @@
 
     $(function () {
 
-        $("#lch-picker").lchPicker();
+        $("#lch-picker").lchPicker({
+            color: "hsv(264.52, 36.47, 100)"
+        });
 
         ColorPicker.init();
 
