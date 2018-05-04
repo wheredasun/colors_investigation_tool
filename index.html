@@ -39,6 +39,9 @@
             <div id="color-picker" class="input-group colorpicker-component">
             </div>
             <div class="separator"></div>
+            <div id="lch-picker" class="input-group lchPicker-component">
+            </div>
+            <div class="separator"></div>
             <div id="canvas">
             </div>
 
@@ -268,6 +271,7 @@
 
 <!-- Custom -->
 <script src="script.js"></script>
+<script src="lch-picker.js"></script>
 <script>
     var templates = {
         'separator': Handlebars.compile(document.getElementById('templates/separator').innerHTML),
@@ -275,6 +279,9 @@
     };
 
     $(function () {
+
+        $("#lch-picker").lchPicker();
+
         ColorPicker.init();
 
         $(function() {

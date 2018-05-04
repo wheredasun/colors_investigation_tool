@@ -136,6 +136,10 @@ body > .container {
 code {
   font-size: 80%; }
 
+.lchPicker-component {
+  width: 200px;
+  height: 200px; }
+
 .navbar-right {
   margin-right: 0px;
   float: right !important; }
