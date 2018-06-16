@@ -107,11 +107,7 @@ var ColorPicker = {
     init: function () {
 
         var handler = function(e, color) {
-            console.log(1);
-
-
             if (color) {
-                console.log(1);
                 ColorPicker.color.setColor(color, 'lch');
                 $("#color-picker").colorpicker('setValue', ColorPicker.color.str('hsl'), false);
             } else {
@@ -125,12 +121,6 @@ var ColorPicker = {
 
                 $("#lch-picker").lchPicker('setValue', ColorPicker.color.getColor('lch'), false);
             }
-
-
-            // $("#color-picker").colorpicker('setValue', ColorPicker.color.str('rgb'));
-
-            // $("#lch-picker").lchPicker('setValue', ColorPicker.color.getColor('lch'));
-
             ColorPicker.updateSliders();
         };
 
