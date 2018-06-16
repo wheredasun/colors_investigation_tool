@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.2/css/bootstrap-colorpicker.css"/>
     <link rel="stylesheet" href="styles.css"/>
 
+    <script src="color-images.js"></script>
+
 </head>
 <body>
 
@@ -125,7 +127,7 @@
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">L</span>
-                        <input type="number" class="form-control" id="lchab-l-number" min="0" max="100" disabled="disabled">
+                        <input type="number" class="form-control" id="lchab-l-number" min="0" max="100">
                     </div>
                     <section  data-shape='slider'>
                         <input type='range' id="lchab-l-range" min="0" max="100"/>
@@ -134,7 +136,7 @@
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">C</span>
-                        <input type="number" class="form-control" id="lchab-c-number" min="0" max="100" disabled="disabled">
+                        <input type="number" class="form-control" id="lchab-c-number" min="0" max="100">
                     </div>
                     <section  data-shape='slider'>
                         <input type='range' id="lchab-c-range" min="0" max="100"/>
@@ -143,7 +145,7 @@
                 <label>
                     <div class="input-number input-group">
                         <span class="input-group-addon">H</span>
-                        <input type="number" class="form-control" id="lchab-h-number" min="0" max="360" disabled="disabled">
+                        <input type="number" class="form-control" id="lchab-h-number" min="0" max="360">
                     </div>
                     <section  data-shape='slider'>
                         <input type='range' id="lchab-h-range" min="0" max="360"/>
@@ -274,16 +276,14 @@
 <script src="script.js"></script>
 <script src="lch-picker.js"></script>
 <script>
+    var colorImages = colorImages || null;
+
     var templates = {
         'separator': Handlebars.compile(document.getElementById('templates/separator').innerHTML),
         'deltas': Handlebars.compile(document.getElementById('templates/deltas').innerHTML)
     };
 
     $(function () {
-
-        $("#lch-picker").lchPicker({
-            color: "hsv(264.52, 36.47, 100)"
-        });
 
         ColorPicker.init();
 
