@@ -29,14 +29,138 @@ function triforce(d, i) {
 }
 // isn't it just a binomial coefficient?
 
+
+// Utils
+function map(fn, list) {
+    var i = 0,
+        result = [];
+    for (i = 0; i < list.length; i++) {
+        result.push(fn(list[i]));
+    }
+    return result;
+}
+
+
+var ColorSpace = require('color-space');
+
+function PreciseColor(color, model) {
+    this.spaces = {
+        rgb: [],
+        hsv: [],
+        lch: [],
+        hsl: []
+    };
+
+    this.authenticModel = model;
+
+    this.str = function (model) {
+        if (model === 'hsl') {
+            return model + "(" + this.spaces[model][0] + "," +
+                this.spaces[model][1] + "%," +
+                this.spaces[model][2] + "%)";
+        }
+        return model + "(" + map(Math.round, this.spaces[model]) + ")";
+    };
+    this.getColor = function (model) {
+        return this.spaces[model];
+    };
+    this.setColor = function (color, model) {
+        this.authenticModel = model;
+        switch (model) {
+            case 'rgb':
+                this.spaces.rgb = color;
+                this.spaces.hsv = ColorSpace.rgb.hsv(color);
+                this.spaces.lch = ColorSpace.rgb.lchab(color);
+                this.spaces.hsl = ColorSpace.rgb.hsl(color);
+                break;
+            case 'hsv':
+                this.spaces.hsv = color;
+                this.spaces.rgb = ColorSpace.hsv.rgb(color);
+                this.spaces.lch = ColorSpace.hsv.lchab(color);
+                this.spaces.hsl = ColorSpace.hsv.hsl(color);
+                break;
+            case 'lch':
+                this.spaces.lch = color;
+                this.spaces.rgb = ColorSpace.lchab.rgb(color);
+                this.spaces.hsv = ColorSpace.lchab.hsv(color);
+                this.spaces.hsl = ColorSpace.lchab.hsl(color);
+                break;
+            case 'hsl':
+                this.spaces.hsl = color;
+                this.spaces.rgb = ColorSpace.hsl.rgb(color);
+                this.spaces.hsv = ColorSpace.hsl.hsv(color);
+                this.spaces.lch = ColorSpace.hsl.lchab(color);
+                break;
+            default:
+                throw new Error('model ' + model + ' is not defined');
+        }
+    };
+
+    this.setColor(color, model);
+}
+
 var ColorPicker = {
     circles: [],
     deltas: [],
-    space: require('color-space'),
+    space: ColorSpace,
+    color: new PreciseColor([264.52, 36.47, 100], 'hsv'),
     init: function () {
+
+        var handler = function(e, color) {
+            console.log(1);
+
+
+            if (color) {
+                console.log(1);
+                ColorPicker.color.setColor(color, 'lch');
+                $("#color-picker").colorpicker('setValue', ColorPicker.color.str('hsl'), false);
+            } else {
+                var color = e.color.value;
+
+                ColorPicker.color.setColor([
+                    color.h * 360,
+                    color.s * 100,
+                    color.b * 100
+                ], 'hsv');
+
+                $("#lch-picker").lchPicker('setValue', ColorPicker.color.getColor('lch'), false);
+            }
+
+
+            // $("#color-picker").colorpicker('setValue', ColorPicker.color.str('rgb'));
+
+            // $("#lch-picker").lchPicker('setValue', ColorPicker.color.getColor('lch'));
+
+            ColorPicker.updateSliders();
+        };
+
+        // color picker path
+        $('#color-picker').colorpicker.constructor.prototype.setValue = function (val, triggerEvent) {
+
+            triggerEvent = (typeof triggerEvent !== 'undefined') ? triggerEvent : true;
+
+            this.color = this.createColor(val);
+            this.update(true);
+
+            if (triggerEvent) {
+                this.element.trigger({
+                    type: 'changeColor',
+                    color: this.color,
+                    value: val
+                });
+            }
+        };
+
+        // $(document).on('changeColor', handler);
+
+        $("#lch-picker").lchPicker({
+            color: ColorPicker.color.getColor('lch')
+        }).on('changeColor', handler);
+
+
         $('#color-picker')
             .colorpicker({
-                color: '#c8a2ff',
+                color: ColorPicker.color.str('hsl'),
                 inline: true,
                 container: true,
                 format: 'rgb',
@@ -51,16 +175,13 @@ var ColorPicker = {
                     }
                 }
             })
-            .on('changeColor', function (e) {
-                ColorPicker.updateSliders(e.color);
-
-            });
+        .on('changeColor', handler);
 
         ColorPicker.addDeltas();
 
         ColorPicker.addHandlers();
 
-        $('#color-picker').colorpicker('setValue', '#c8a2ff');
+        $('#color-picker').colorpicker('setValue', ColorPicker.color.str('hsl'));
 
     },
 
@@ -95,11 +216,7 @@ var ColorPicker = {
             .attr("cx", function (d) { return d.x; })
             .attr("cy", function (d) { return d.y; })
             .attr("r", function (d) { return d.r; })
-            .style("fill", function(d) { return "rgb(" + ColorPicker.map(Math.round, ColorPicker.HSVtoRGB(
-                d.color.h,
-                d.color.s,
-                d.color.v
-            )) + ")"; });
+            .style("fill", function(d) { return d.color.str('rgb'); });
 
 
 
@@ -107,22 +224,50 @@ var ColorPicker = {
         $('#color-picker .dot').remove();
         $('#color-picker .line').remove();
 
+        $('#lch-picker .dot').remove();
+        $('#lch-picker .line').remove();
+
         for (var i = 1; i < ColorPicker.circles.length; i++) {
             var previousColor = ColorPicker.circles[i-1].color;
             var color = ColorPicker.circles[i].color;
 
-            if (color.h !== previousColor.h) {
+            //< this part is for lch
+            var lchColor = color.getColor('lch');
+
+            var hScale = d3.scale.linear()
+                .domain([0, 360])
+                .range([0, 200]);
+
+            var lcScale = d3.scale.linear()
+                .domain([0, 100])
+                .range([0, 200]);
+            //> this part was for lch
+
+            if (color.getColor('hsv')[0] !== previousColor.getColor('hsv')[0]) {
                 var $line = $("<span class='line'></span>");
                 $('#color-picker .colorpicker-hue').append($line);
-                $line.css('top', (200 - color.h / 360 * 200) + "px");
+                $line.css('top', (200 - color.getColor('hsv')[0] / 360 * 200) + "px");
+
+                var $line = $("<span class='line'></span>");
+                $('#lch-picker .h').append($line);
+                $line.css('top', hScale(lchColor[2]) + "px");
             }
 
-            if (color.v !== previousColor.v || color.s !== previousColor.s) {
+            if (color.getColor('hsv')[1] !== previousColor.getColor('hsv')[1] ||
+                color.getColor('hsv')[2] !== previousColor.getColor('hsv')[2]) {
+
                 var $dot = $("<span class='dot'><b></b></span>");
                 $('#color-picker .colorpicker-saturation').append($dot);
                 $dot.css({
-                    'top': (200 - color.v / 100 * 200) + "px",
-                    'left': (color.s / 100 * 200) + "px"
+                    'top': (200 - color.getColor('hsv')[2] / 100 * 200) + "px",
+                    'left': (color.getColor('hsv')[1] / 100 * 200) + "px"
+                });
+
+                var $dot = $("<span class='dot'><b></b></span>");
+                $('#lch-picker .lc-inner').append($dot);
+                $dot.css({
+                    'top': lcScale(lchColor[1]) + "px",
+                    'left': lcScale(lchColor[0]) + "px"
                 });
             }
         }
@@ -138,11 +283,7 @@ var ColorPicker = {
 
         for (var i = 0; i < ColorPicker.circles.length; i++) {
             var d =  ColorPicker.circles[i];
-            var color = "rgb(" + ColorPicker.map(Math.round, ColorPicker.HSVtoRGB(
-                d.color.h,
-                d.color.s,
-                d.color.v
-            )) + ")";
+            var color = d.color.str('rgb');
 
             ctx1x.fillStyle = color;
             ctx1x.fillRect(i, 6, 1, 1);
@@ -270,20 +411,26 @@ var ColorPicker = {
 
         // LCH
         $("#lchab-l-number, #lchab-c-number, #lchab-h-number").on('input', function(){
-            var color = ColorPicker.space.lchab.hsv([
+            $("#lch-picker").lchPicker('setValue', [
                 parseInt($("#lchab-l-number").val()),
-                parseInt($("#lchab-c-number").val()),
-                parseInt($("#lchab-h-number").val())
+                    parseInt($("#lchab-c-number").val()),
+                    parseInt($("#lchab-h-number").val())
             ]);
+
+            // var color = ColorPicker.space.lchab.hsv([
+            //     parseInt($("#lchab-l-number").val()),
+            //     parseInt($("#lchab-c-number").val()),
+            //     parseInt($("#lchab-h-number").val())
+            // ]);
             // console.log(color);
             // $('#color-picker').colorpicker('setValue',
             //         "rgb(" + color + ")");
-            $('#color-picker').colorpicker('setValue', {
-                h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
-            });
+            // $('#color-picker').colorpicker('setValue', {
+            //     h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
+            // });
         });
         $("#lchab-l-range, #lchab-c-range, #lchab-h-range").on('input change', function(){
-            var color = ColorPicker.space.lchab.hsv([
+            $("#lch-picker").lchPicker('setValue', [
                 parseInt($("#lchab-l-range").val()),
                 parseInt($("#lchab-c-range").val()),
                 parseInt($("#lchab-h-range").val())
@@ -291,9 +438,9 @@ var ColorPicker = {
             // $('#color-picker').colorpicker('setValue',
             //         "rgb(" + color + ")");
 
-            $('#color-picker').colorpicker('setValue', {
-                h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
-            });
+            // $('#color-picker').colorpicker('setValue', {
+            //     h: color[0] / 360, s: color[1] / 100, b: color[2] / 100
+            // });
 
         });
 
@@ -367,36 +514,31 @@ var ColorPicker = {
         }
     },
 
-    updateSliders: function (color) {
+    updateSliders: function () {
         // HSV
-        var hsv = ColorPicker.HSBtoHSV(color.value.h, color.value.s, color.value.b);
+        var hsv = ColorPicker.color.getColor('hsv');
 
-        $("#h-number").val(hsv.h);
-        $("#s-number").val(hsv.s);
-        $("#v-number").val(hsv.v);
+        $("#h-number").val(hsv[0]);
+        $("#s-number").val(hsv[1]);
+        $("#v-number").val(hsv[2]);
 
-        $("#h-range").val(hsv.h);
-        $("#s-range").val(hsv.s);
-        $("#v-range").val(hsv.v);
+        $("#h-range").val(hsv[0]);
+        $("#s-range").val(hsv[1]);
+        $("#v-range").val(hsv[2]);
 
         // RGB
-        var rgb = color.toRGB();
+        var rgb = ColorPicker.color.getColor('rgb');
 
-        $("#r-number").val(rgb.r);
-        $("#g-number").val(rgb.g);
-        $("#b-number").val(rgb.b);
+        $("#r-number").val(rgb[0]);
+        $("#g-number").val(rgb[1]);
+        $("#b-number").val(rgb[2]);
 
-        $("#r-range").val(rgb.r);
-        $("#g-range").val(rgb.g);
-        $("#b-range").val(rgb.b);
+        $("#r-range").val(rgb[0]);
+        $("#g-range").val(rgb[1]);
+        $("#b-range").val(rgb[2]);
 
         // LCH
-        var lch = ColorPicker.space.hsv.lchab([
-            color.value.h * 360, color.value.s * 100, color.value.b * 100
-        ]);
-        lch[0] = roundHalf(lch[0]);
-        lch[1] = roundHalf(lch[1]);
-        lch[2] = Math.round(lch[2]);
+        var lch = ColorPicker.color.getColor('lch');
 
         $("#lchab-l-number").val(lch[0]);
         $("#lchab-c-number").val(lch[1]);
@@ -411,7 +553,7 @@ var ColorPicker = {
     },
     rerender: function() {
 
-        var initColor = $('#color-picker').colorpicker().data('colorpicker').color;
+        // var initColor = $('#color-picker').colorpicker().data('colorpicker').color;
 
         var colorSpace = $('#color-space').val();
 
@@ -433,51 +575,40 @@ var ColorPicker = {
 
                     switch (colorSpace) {
                         case "HSV":
-                            var color = ColorPicker.HSBtoHSV(initColor.value.h, initColor.value.s, initColor.value.b);
+                            var color = ColorPicker.color.getColor('hsv');
 
-                            var h = (color.h + corrections[0]) % 360; // only for H
+                            var h = (color[0] + corrections[0]) % 360; // only for H
                             if (h < 0) h = 360 + h;
 
-                            var s = color.s + corrections[1];
+                            var s = color[1] + corrections[1];
                             if (s < 0) s = 0;
                             if (s > 100) s = 100;
 
-                            var v = color.v + corrections[2];
+                            var v = color[2] + corrections[2];
                             if (v < 0) v = 0;
                             if (v > 100) v = 100;
 
-                            return {
-                                h: h,
-                                s: s,
-                                v: v
-                            };
+                            return new PreciseColor([h, s, v], 'hsv');
 
                         case "RGB":
-                            var color = initColor.toRGB();
+                            var color = ColorPicker.color.getColor('rgb');
 
-                            var r = color.r + corrections[0];
+                            var r = color[0] + corrections[0];
                             if (r < 0) r = 0;
                             if (r > 255) r = 255;
 
-                            var g = color.g + corrections[1];
+                            var g = color[1] + corrections[1];
                             if (g < 0) g = 0;
                             if (g > 255) g = 255;
 
-                            var b = color.b + corrections[2];
+                            var b = color[2] + corrections[2];
                             if (b < 0) b = 0;
                             if (b > 255) b = 255;
 
-                            color = ColorPicker.space.rgb.hsv([r, g, b]);
-                            return {
-                                h: color[0],
-                                s: color[1],
-                                v: color[2]
-                            };
+                            return new PreciseColor([r, g, b], 'rgb');
 
                         case "LCH":
-                            var lch = ColorPicker.space.hsv.lchab([
-                                initColor.value.h * 360, initColor.value.s * 100, initColor.value.b * 100
-                            ]);
+                            var lch = ColorPicker.color.getColor('lch');
 
                             var l = lch[0] + corrections[0];
                             if (l < 0) l = 0;
@@ -490,13 +621,7 @@ var ColorPicker = {
                             var h = (lch[2] + corrections[2]) % 360; // only for H
                             if (h < 0) h = 360 + h;
 
-                            color = ColorPicker.space.lchab.hsv([l, c, h]);
-
-                            return {
-                                h: color[0],
-                                s: color[1],
-                                v: color[2]
-                            };
+                            return new PreciseColor([l, c, h], 'lch');
                     }
 
                 })(i)
