@@ -223,6 +223,9 @@ code {
 nav {
   min-width: 300px; }
 
+.checkbox-label {
+  font-weight: normal; }
+
 .sidebar {
   padding: 10px; }
 

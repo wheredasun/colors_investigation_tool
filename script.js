@@ -103,6 +103,9 @@ var ColorPicker = {
     circles: [],
     deltas: [],
     space: ColorSpace,
+    settings: {
+        colorfulCircles: $("#colorful-circles").is(':checked')
+    },
     color: new PreciseColor([264.52, 36.47, 100], 'hsv'),
     init: function () {
 
@@ -209,6 +212,9 @@ var ColorPicker = {
             .style("fill", function(d) { return d.color.str('rgb'); });
 
 
+        // colorful circles - main circle
+        ColorPicker._coloriseCircles( $(".colorpicker-saturation").find("i"), ColorPicker.color);
+        ColorPicker._coloriseCircles( $(".lc-inner").find("i"), ColorPicker.color);
 
         // refactor to d3
         $('#color-picker .dot').remove();
@@ -252,14 +258,8 @@ var ColorPicker = {
                     'top': (200 - color.getColor('hsv')[2] / 100 * 200) + "px",
                     'left': (color.getColor('hsv')[1] / 100 * 200) + "px"
                 });
-                $dot.find('b').css({
-                    'border-color': (new PreciseColor([
-                        color.getColor('hsv')[0],
-                        100,
-                        100
-                    ], 'hsv')).str('hsl')
-                });
 
+                ColorPicker._coloriseCircles($dot, color);
 
                 var $dot = $("<span class='dot'><b></b></span>");
                 $('#lch-picker .lc-inner').append($dot);
@@ -267,6 +267,8 @@ var ColorPicker = {
                     'top': lcScale(lchColor[1]) + "px",
                     'left': lcScale(lchColor[0]) + "px"
                 });
+
+                ColorPicker._coloriseCircles($dot, color);
             }
         }
 
@@ -291,6 +293,20 @@ var ColorPicker = {
 
         }
 
+    },
+
+    _coloriseCircles: function ($el, color) {
+        if (ColorPicker.settings.colorfulCircles) {
+            $el.find('b').css({
+                'border-color': (new PreciseColor([
+                    color.getColor('hsv')[0],
+                    100,
+                    100
+                ], 'hsv')).str('hsl')
+            });
+        } else {
+            $el.find('b').css('border-color', '#fff');
+        }
     },
 
     addDeltas: function () {
@@ -350,6 +366,15 @@ var ColorPicker = {
     },
 
     addHandlers: function () {
+        $("#colorful-circles").change(function() {
+            if (this.checked) {
+                ColorPicker.settings.colorfulCircles = true;
+            } else {
+                ColorPicker.settings.colorfulCircles = false;
+            }
+            ColorPicker.rerender();
+        });
+
         // Add and remove deltas
         $("#remove-deltas").click(function(){
             ColorPicker.deltas.pop();
