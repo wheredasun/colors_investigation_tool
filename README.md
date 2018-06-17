@@ -3,5 +3,5 @@
 
 > Tool for investigating color distances? spaces? for creating palettes? based on an idea by _Tritanopia_.
 
-https://wheredasun.github.io/colors_investigation_tool/
+https://wheredasun.github.io/colors_investigation_tool/ *(~20 MB)*
 
