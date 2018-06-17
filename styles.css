@@ -137,6 +137,9 @@ body > .container {
 code {
   font-size: 80%; }
 
+#lch-picker {
+  min-width: 250px; }
+
 .lchPicker-component {
   display: inline-block;
   position: relative;
@@ -219,6 +222,9 @@ code {
 
 nav {
   min-width: 300px; }
+
+.checkbox-label {
+  font-weight: normal; }
 
 .sidebar {
   padding: 10px; }
