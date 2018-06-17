@@ -252,6 +252,14 @@ var ColorPicker = {
                     'top': (200 - color.getColor('hsv')[2] / 100 * 200) + "px",
                     'left': (color.getColor('hsv')[1] / 100 * 200) + "px"
                 });
+                $dot.find('b').css({
+                    'border-color': (new PreciseColor([
+                        color.getColor('hsv')[0],
+                        100,
+                        100
+                    ], 'hsv')).str('hsl')
+                });
+
 
                 var $dot = $("<span class='dot'><b></b></span>");
                 $('#lch-picker .lc-inner').append($dot);
